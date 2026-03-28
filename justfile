@@ -45,5 +45,7 @@ patch-nerd-font:
 install:
     #!/usr/bin/env bash
     set -euo pipefail
+    echo "==> Installing fonts..."
     cp dist/*.ttf ~/Library/Fonts/
+    echo "==> Fonts installed successfully"
 
