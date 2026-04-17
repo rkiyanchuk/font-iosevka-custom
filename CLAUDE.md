@@ -9,23 +9,24 @@ This repository builds custom Iosevka fonts with Nerd Font patches. It uses Dock
 ## Build Commands
 
 ```bash
-just                    # Full build: clone, build image, compile fonts, patch with Nerd Fonts
-just clone              # Sparse checkout of Iosevka docker/ directory only
+just                    # Full build: clone, build image, compile fonts, patch with Nerd Fonts, install
+just clone              # Sparse checkout of Iosevka docker/ directory only (fetches latest tag)
 just build-fontcc-image # Build Docker image for font compilation
-just compile-iosevka    # Compile Iosevka fonts using Docker
-just patch-nerd-font    # Patch compiled fonts with Nerd Font glyphs
+just compile-iosevka    # Compile Iosevka fonts using Docker (outputs to dist/*/TTF-Unhinted/)
+just patch-nerd-font    # Patch compiled fonts with Nerd Font glyphs (outputs *.ttf to dist/)
+just install            # Copy dist/*.ttf to ~/Library/Fonts/ (macOS only)
 ```
 
 ## Architecture
 
 - `private-build-plans.toml` - Font customization configuration defining two font families:
-  - `iosevka` - Normal spacing variant
-  - `iosevka-term` - Terminal spacing variant (narrower symbols)
-  - Both inherit from SS14 stylistic set with custom glyph variants
-    (Jetbrains).
+  - `iosevka` (`spacing = "normal"`) - Normal spacing variant
+  - `iosevka-term` (`spacing = "term"`) - Terminal spacing variant (narrower symbols)
+  - Both inherit from SS14 (JetBrains-style) with `noCvSs = true` (character variant selectors not exported)
 
-- `Iosevka/` - Sparse checkout containing only `docker/` directory for building fontcc image
-- `dist/` - Output directory for compiled fonts (TTF-Unhinted subdirectories)
+- `Iosevka/` - Sparse checkout containing only `docker/` for building the `fontcc` Docker image
+- `dist/iosevka/TTF-Unhinted/` and `dist/iosevka-term/TTF-Unhinted/` - Raw compiled fonts (input for Nerd Font patcher)
+- `dist/*.ttf` - Final Nerd Font-patched fonts, ready to install
 
 ## Key Resources
 
