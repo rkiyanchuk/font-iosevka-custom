@@ -109,6 +109,16 @@ asterisk = "hex-low"
 brace = "straight"
 at = "fourfold"
 
+[buildPlans.iosevka-term.weights.ExtraLight]
+shape = 200
+menu = 200
+css = 200
+
+[buildPlans.iosevka-term.weights.SemiLight]
+shape = 250
+menu = 250
+css = 250
+
 [buildPlans.iosevka-term.weights.Light]
 shape = 300
 menu = 300

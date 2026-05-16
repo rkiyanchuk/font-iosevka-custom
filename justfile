@@ -62,4 +62,3 @@ install:
     rm -f ~/Library/Fonts/Iosevka*.ttf
     cp dist/*.ttf ~/Library/Fonts/
     echo "==> Fonts installed successfully"
-
