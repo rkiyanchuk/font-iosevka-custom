@@ -28,11 +28,6 @@ asterisk = "hex-low"
 brace = "straight"
 at = "fourfold"
 
-[buildPlans.iosevka.weights.Thin]
-shape = 100
-menu = 100
-css = 100
-
 [buildPlans.iosevka.weights.ExtraLight]
 shape = 200
 menu = 200
@@ -108,11 +103,6 @@ lower-upsilon = "casual-serifed"
 asterisk = "hex-low"
 brace = "straight"
 at = "fourfold"
-
-[buildPlans.iosevka-term.weights.Thin]
-shape = 100
-menu = 100
-css = 100
 
 [buildPlans.iosevka-term.weights.ExtraLight]
 shape = 200
