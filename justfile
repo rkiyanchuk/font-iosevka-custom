@@ -4,6 +4,17 @@
 # Default recipe: compile and install Iosevka font from scratch
 default: clone build-fontcc-image compile-iosevka patch-nerd-font install
 
+# Print latest upstream versions of Iosevka and Nerd Fonts
+versions:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    IOSEVKA_TAGS=$(git ls-remote --tags --sort=-version:refname https://github.com/be5invis/Iosevka.git)
+    IOSEVKA=$(echo "$IOSEVKA_TAGS" | head -1 | sed 's/.*refs\/tags\///')
+    NERD_TAGS=$(git ls-remote --tags --sort=-version:refname https://github.com/ryanoasis/nerd-fonts.git)
+    NERD=$(echo "$NERD_TAGS" | head -1 | sed 's/.*refs\/tags\///')
+    echo "Iosevka:    $IOSEVKA"
+    echo "Nerd Fonts: $NERD"
+
 # Clone/update only Docker directory from Iosevka repo.
 clone:
     #!/usr/bin/env bash
