@@ -52,7 +52,7 @@ patch-nerd-font:
     TAG=$(curl -s "https://hub.docker.com/v2/repositories/nerdfonts/patcher/tags?page_size=1&name=4" | grep -o '"name":"[0-9.]*"' | head -1 | cut -d'"' -f4)
     echo "==> Using nerdfonts/patcher $TAG"
     docker run --rm -v ./dist/iosevka/TTF-Unhinted/:/in:Z -v ./dist:/out:Z nerdfonts/patcher:$TAG --complete --makegroups 4
-    docker run --rm -v ./dist/iosevka-term/TTF-Unhinted/:/in:Z -v ./dist:/out:Z nerdfonts/patcher:$TAG --mono --complete --makegroups 4
+    docker run --rm -v ./dist/iosevka-term/TTF-Unhinted/:/in:Z -v ./dist:/out:Z nerdfonts/patcher:$TAG --complete --makegroups 4
 
 # Install font on macOS
 install:
