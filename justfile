@@ -38,6 +38,7 @@ build-fontcc-image:
 compile-iosevka:
     #!/usr/bin/env bash
     set -euo pipefail
+    rm -rf dist/iosevka dist/iosevka-term
     TAGS=$(git ls-remote --tags --sort=-version:refname https://github.com/be5invis/Iosevka.git)
     TAG=$(echo "$TAGS" | head -1 | sed 's/.*refs\/tags\///')
     echo "==> Using Iosevka $TAG"
@@ -47,6 +48,7 @@ compile-iosevka:
 patch-nerd-font:
     #!/usr/bin/env bash
     set -euo pipefail
+    rm -f dist/*.ttf
     TAG=$(curl -s "https://hub.docker.com/v2/repositories/nerdfonts/patcher/tags?page_size=1&name=4" | grep -o '"name":"[0-9.]*"' | head -1 | cut -d'"' -f4)
     echo "==> Using nerdfonts/patcher $TAG"
     docker run --rm -v ./dist/iosevka/TTF-Unhinted/:/in:Z -v ./dist:/out:Z nerdfonts/patcher:$TAG --complete --makegroups 4
@@ -57,6 +59,7 @@ install:
     #!/usr/bin/env bash
     set -euo pipefail
     echo "==> Installing fonts..."
+    rm -f ~/Library/Fonts/Iosevka*.ttf
     cp dist/*.ttf ~/Library/Fonts/
     echo "==> Fonts installed successfully"
 
