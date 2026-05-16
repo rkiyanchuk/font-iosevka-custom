@@ -33,6 +33,11 @@ shape = 200
 menu = 200
 css = 200
 
+[buildPlans.iosevka.weights.SemiLight]
+shape = 250
+menu = 250
+css = 250
+
 [buildPlans.iosevka.weights.Light]
 shape = 300
 menu = 300
