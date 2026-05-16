@@ -41,7 +41,7 @@ compile-iosevka:
     TAGS=$(git ls-remote --tags --sort=-version:refname https://github.com/be5invis/Iosevka.git)
     TAG=$(echo "$TAGS" | head -1 | sed 's/.*refs\/tags\///')
     echo "==> Using Iosevka $TAG"
-    docker run -it --rm -v ${PWD}:/work -e "VERSION_TAG=$TAG" fontcc ttf-unhinted::iosevka ttf-unhinted::iosevka-term
+    docker run --rm -v ${PWD}:/work -e "VERSION_TAG=$TAG" fontcc ttf-unhinted::iosevka ttf-unhinted::iosevka-term
 
 # Patch fonts with Nerd Font glyphs
 patch-nerd-font:
@@ -50,7 +50,7 @@ patch-nerd-font:
     TAG=$(curl -s "https://hub.docker.com/v2/repositories/nerdfonts/patcher/tags?page_size=1&name=4" | grep -o '"name":"[0-9.]*"' | head -1 | cut -d'"' -f4)
     echo "==> Using nerdfonts/patcher $TAG"
     docker run --rm -v ./dist/iosevka/TTF-Unhinted/:/in:Z -v ./dist:/out:Z nerdfonts/patcher:$TAG --complete --makegroups 4
-    docker run --rm -v ./dist/iosevka-term/TTF-Unhinted/:/in:Z -v ./dist:/out:Z nerdfonts/patcher:$TAG --complete --makegroups 4
+    docker run --rm -v ./dist/iosevka-term/TTF-Unhinted/:/in:Z -v ./dist:/out:Z nerdfonts/patcher:$TAG --mono --complete --makegroups 4
 
 # Install font on macOS
 install:
