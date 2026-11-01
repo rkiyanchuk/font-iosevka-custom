@@ -2,7 +2,7 @@
 # Nerd fonts cheat sheet: https://www.nerdfonts.com/cheat-sheet
 
 # Default recipe: compile and install Iosevka font from scratch
-default: clone build-fontcc-image compile-iosevka patch-nerd-font install
+default: clone build-fontcc-image compile-iosevka enlarge-escape patch-nerd-font install
 
 # Print latest stable upstream versions of Iosevka and Nerd Fonts
 versions:
@@ -66,6 +66,10 @@ compile-iosevka:
         echo "build_plan_sha256=$(shasum -a 256 private-build-plans.toml | cut -d' ' -f1)"
         echo "fontcc_image=$(docker image inspect --format '{{{{.Id}}' fontcc)"
     } > dist/BUILD-INFO
+
+# Enlarge Iosevka's tiny ⎋ (U+238B) in compiled fonts (run before patch-nerd-font)
+enlarge-escape:
+    uv run -q scripts/enlarge-escape-glyph.py dist/iosevka/TTF-Unhinted dist/iosevka-term/TTF-Unhinted
 
 # Patch fonts with Nerd Font glyphs
 patch-nerd-font:
