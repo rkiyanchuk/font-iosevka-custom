@@ -56,20 +56,47 @@ build-fontcc-image:
 compile-iosevka:
     #!/usr/bin/env bash
     set -euo pipefail
-    rm -rf dist/iosevka dist/iosevka-term
+    rm -rf dist/iosevka dist/iosevka-term dist/BUILD-INFO
     TAG=$(just _iosevka-tag)
     echo "==> Using Iosevka $TAG"
     docker run --rm -v ${PWD}:/work -e "VERSION_TAG=$TAG" fontcc ttf-unhinted::iosevka ttf-unhinted::iosevka-term
+    {
+        echo "compiled_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        echo "iosevka=$TAG"
+        echo "build_plan_sha256=$(shasum -a 256 private-build-plans.toml | cut -d' ' -f1)"
+        echo "fontcc_image=$(docker image inspect --format '{{{{.Id}}' fontcc)"
+    } > dist/BUILD-INFO
 
 # Patch fonts with Nerd Font glyphs
 patch-nerd-font:
     #!/usr/bin/env bash
     set -euo pipefail
     rm -f dist/*.ttf
+    [ -f dist/BUILD-INFO ] || { echo "error: dist/BUILD-INFO missing; run 'just compile-iosevka' first" >&2; exit 1; }
     TAG=$(just _patcher-tag)
     echo "==> Using nerdfonts/patcher $TAG"
     docker run --rm -v ./dist/iosevka/TTF-Unhinted/:/in:Z -v ./dist:/out:Z nerdfonts/patcher:$TAG --complete --makegroups 4
     docker run --rm -v ./dist/iosevka-term/TTF-Unhinted/:/in:Z -v ./dist:/out:Z nerdfonts/patcher:$TAG --complete --makegroups 4
+    NERD=$(strings dist/IosevkaNerdFont-Regular.ttf | awk '!v && match($0, /Nerd Fonts [0-9.]+/) { v = substr($0, RSTART + 11, RLENGTH - 11) } END { print v }')
+    grep -vE '^(patched_at|nerdfonts|nerdfonts_patcher)=' dist/BUILD-INFO > dist/BUILD-INFO.tmp || true
+    {
+        echo "patched_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        echo "nerdfonts=v$NERD"
+        echo "nerdfonts_patcher=$(docker image inspect --format '{{{{index .RepoDigests 0}}' nerdfonts/patcher:$TAG)"
+    } >> dist/BUILD-INFO.tmp
+    mv dist/BUILD-INFO.tmp dist/BUILD-INFO
+
+# Show versions of the last build and of the installed fonts
+built:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "==> dist/BUILD-INFO"
+    cat dist/BUILD-INFO 2>/dev/null || echo "(none)"
+    echo "==> Embedded in installed fonts (name ID 5)"
+    for f in ~/Library/Fonts/Iosevka*NerdFont-Regular.ttf; do
+        [ -e "$f" ] || { echo "(none installed)"; break; }
+        echo "$(basename "$f"): $(strings "$f" | awk '!v && /^Version [0-9]/ { v = $0 } END { print v }')"
+    done
 
 # Install font on macOS
 install:

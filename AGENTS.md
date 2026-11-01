@@ -15,6 +15,8 @@ just build-fontcc-image # Build Docker image for font compilation
 just compile-iosevka    # Compile Iosevka fonts using Docker (outputs to dist/*/TTF-Unhinted/)
 just patch-nerd-font    # Patch compiled fonts with Nerd Font glyphs (outputs *.ttf to dist/)
 just install            # Copy dist/*.ttf to ~/Library/Fonts/ (macOS only)
+just versions           # Print latest upstream Iosevka / Nerd Fonts / patcher versions
+just built              # Print dist/BUILD-INFO and version strings of installed fonts
 ```
 
 ## Architecture
